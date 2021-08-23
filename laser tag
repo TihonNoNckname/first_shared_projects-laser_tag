@@ -1,0 +1,131 @@
+import pygame
+import cv2
+import numpy
+import sys
+import math
+import requests
+
+Vcap = cv2.VideoCapture(0)
+loosectionary = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_1000)
+pygame.init()
+pygame.display.set_caption('nohing')
+h = 480
+w = 640
+screen = pygame.display.set_mode([w, h])
+image_button = pygame.image.load('img/butonia.jpg')
+
+def who_is_who_in_collors():
+    pix = img[int(h / 2), int(w / 2)]
+    b, g, r = pix
+    cv2.line(img, (0, int(h / 2)), (int(w / 2.3587), int(h / 2)), (225, 225, 170), 2)
+    cv2.line(img, (int(w / 1.7381), int(h / 2)), (int(w / 1.0015), int(h / 2)), (225, 225, 170), 2)
+    cv2.line(img, (int(w / 2), 0), (int(w / 2), int(h / 2.5263)), (225, 225, 170), 2)
+    cv2.line(img, (int(w / 2), int(h / 1.6552)), (int(w / 2), int(h / 1.002)), (225, 225, 170), 2)
+    cv2.line(img, (int(w / 2.3587), int(h / 2.5263)), (int(w / 1.7381), int(h / 2.5263)), (225, 225, 170), 2)
+    cv2.line(img, (int(w / 2.3587), int(h / 1.6552)), (int(w / 1.7381), int(h / 1.6552)), (225, 225, 170), 2)
+    cv2.line(img, (int(w / 2.3587), int(h / 2.5263)), (int(w / 2.3587), int(h / 1.6552)), (225, 225, 170), 2)
+    cv2.line(img, (int(w / 1.7381), int(h / 2.5263)), (int(w / 1.7381), int(h / 1.6552)), (225, 225, 170), 2)
+
+    cv2.line(img, (int(w / 2.3587), int(h / 2)), (int(w / 1.7381), int(h / 2)), (25, 25, 10), 2)
+    cv2.line(img, (int(w / 2), int(h / 2.5263)), (int(w / 2), int(h / 1.6552)), (25, 25, 10), 2)
+
+    cv2.circle(img, (int(w / 2), int(h / 2)), 3, (int(b), int(g), int(r)), -1)
+
+yccy = 0
+xccx = 0
+xy1 = 0
+yx1 = 0
+def outline_arca_maker():
+    global xccx, yccy, xy1, yx1
+    if crn != []:
+        mark_crn = crn[0]
+        # xy1, yx1 = mark_crn[0][0]
+        # cv2.circle(img, (int(xy1), int(yx1)), 10, (2, 2, 10), -1)
+        # xy2, yx2 = mark_crn[0][1]
+        # cv2.circle(img, (int(xy2), int(yx2)), 10, (2, 2, 10), -1)
+        # xy3, yx3 = mark_crn[0][2]
+        # cv2.circle(img, (int(xy3), int(yx3)), 10, (2, 2, 10), -1)
+        # xy4, yx4 = mark_crn[0][3]
+        # cv2.circle(img, (int(xy4), int(yx4)), 10, (2, 2, 10), -1)
+
+        xy1, yx1 = mark_crn[0][0]  # координаты первой вершины
+        xy2, yx2 = mark_crn[0][1]
+        cv2.line(img, (int(xy1), int(yx1)), (int(xy2), int(yx2)), (100, 100, 0), 3)
+        # sid1 = math.sqrt((xy2-xy1)**2+(yx2-yx1)**2)
+        # sid1 = int(sid1)
+        # cv2.putText(img, 'sid1:  '+str(sid1), (0, 100), cv2.FONT_HERSHEY_PLAIN, 3, (190, 210, 0), 3)
+        xy3, yx3 = mark_crn[0][2]
+        cv2.line(img, (int(xy2), int(yx2)), (int(xy3), int(yx3)), (150, 150, 0), 3)
+        # sid2 = math.sqrt((xy3-xy2)**2+(yx3-yx2)**2)
+        # sid2 = int(sid2)
+        # cv2.putText(img, 'sid2:  '+str(sid2), (0, 200), cv2.FONT_HERSHEY_PLAIN, 3, (200, 255, 0), 3)
+        xy4, yx4 = mark_crn[0][3]
+        cv2.line(img, (int(xy3), int(yx3)), (int(xy4), int(yx4)), (200, 200, 0), 3)
+        # sid3 = math.sqrt((xy4-xy3)**2+(yx4-yx3)**2)
+        # sid3 = int(sid3)
+        # cv2.putText(img, 'sid3:  '+str(sid3), (0, 300), cv2.FONT_HERSHEY_PLAIN, 3, (150, 255, 0), 3)
+        cv2.line(img, (int(xy1), int(yx1)), (int(xy4), int(yx4)), (250, 250, 0), 3)
+        # sid4 = math.sqrt((xy4-xy1)**2+(yx4-yx1)**2)
+        # sid4 = int(sid4)
+        # cv2.putText(img, 'sid4:  '+str(sid4), (0, 400), cv2.FONT_HERSHEY_PLAIN, 3, (150, 150, 0), 3)
+        # Точка в центре аруко-маркера:
+        xccx = (xy1 + xy3) / 2
+        yccy = (yx1 + yx3) / 2
+        print(xccx, yccy)
+        cv2.circle(img, (int(xccx), int(yccy)), 5, (0, 0, 255), -1)
+        cv2.putText(img, str(eid), (int(xccx), int(yccy)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 0), 3)
+
+class FireButton(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(image_button, (70, 70))
+        self.rect = self.image.get_rect()
+        self.rect.center = (int(w/2), int(h*4/5))
+    def dekcilc_si(self):
+        return pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos())
+button_sprites = pygame.sprite.Group()
+fbut = FireButton()
+button_sprites.add(fbut)
+
+
+play = True
+while play:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            cv2.destroyAllWindows()
+            sys.exit()
+    ret, img = Vcap.read()
+
+    """Работа с аруко-маркером:"""
+    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    crn, eid, server = cv2.aruco.detectMarkers(img_gray, loosectionary)
+    cv2.aruco.drawDetectedMarkers(img, crn)
+    outline_arca_maker()  # обводка аруко-маркера
+    who_is_who_in_collors()
+    x_scuad = abs(xccx - xy1)
+    why = abs(yccy - yx1)
+    if fbut.dekcilc_si():
+        print(' ')
+        if w/2 > (xccx - x_scuad):
+            if w/2 <(xccx + x_scuad):
+                if h/2 > (yccy - why):
+                    if h/2 < (yccy + why):
+                        cv2.putText(img, str('OHOHOHOHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOH'), (int(xccx), int(yccy)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 200, 0), 3)
+
+
+
+
+    """Вывод картинки на экран:"""
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = numpy.rot90(img)
+    img = pygame.surfarray.make_surface(img)
+    screen.blit(img, (0, 0))
+
+
+    """Добавление кнопки на экран:"""
+    button_sprites.update()
+    button_sprites.draw(screen)
+
+
+    pygame.display.update()
